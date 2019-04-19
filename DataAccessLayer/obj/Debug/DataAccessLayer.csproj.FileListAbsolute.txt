@@ -1,0 +1,12 @@
+C:\Net\ConsultaUTN_Simplified_Async_V3\DataAccessLayer\bin\Debug\DataAccessLayer.dll.config
+C:\Net\ConsultaUTN_Simplified_Async_V3\DataAccessLayer\bin\Debug\DataAccessLayer.dll
+C:\Net\ConsultaUTN_Simplified_Async_V3\DataAccessLayer\bin\Debug\DataAccessLayer.pdb
+C:\Net\ConsultaUTN_Simplified_Async_V3\DataAccessLayer\bin\Debug\EntityFramework.dll
+C:\Net\ConsultaUTN_Simplified_Async_V3\DataAccessLayer\bin\Debug\EntityFramework.SqlServer.dll
+C:\Net\ConsultaUTN_Simplified_Async_V3\DataAccessLayer\bin\Debug\EntityFramework.xml
+C:\Net\ConsultaUTN_Simplified_Async_V3\DataAccessLayer\bin\Debug\EntityFramework.SqlServer.xml
+C:\Net\ConsultaUTN_Simplified_Async_V3\DataAccessLayer\obj\Debug\DataAccessLayer.csproj.CoreCompileInputs.cache
+C:\Net\ConsultaUTN_Simplified_Async_V3\DataAccessLayer\obj\Debug\DataAccessLayer.csproj.CopyComplete
+C:\Net\ConsultaUTN_Simplified_Async_V3\DataAccessLayer\obj\Debug\DataAccessLayer.dll
+C:\Net\ConsultaUTN_Simplified_Async_V3\DataAccessLayer\obj\Debug\DataAccessLayer.pdb
+C:\Net\ConsultaUTN_Simplified_Async_V3\DataAccessLayer\obj\Debug\DataAccessLayer.csprojAssemblyReference.cache
