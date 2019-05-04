@@ -63,6 +63,7 @@ namespace WebApi.Controllers
 
 
         // DELETE api/Product/5
+        [Authorize]
         [ResponseType(typeof(Product))]
         public IHttpActionResult Delete(int id)
         {
@@ -93,7 +94,7 @@ namespace WebApi.Controllers
         [ResponseType(typeof(Product))]
         public IHttpActionResult Put(int id, [FromBody] Product sentProduct)
         {
-            if(id != sentProduct.Id)
+            if (id != sentProduct.Id)
             {
                 return BadRequest();
             }
@@ -123,4 +124,3 @@ namespace WebApi.Controllers
         }
     }
 }
-
