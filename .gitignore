@@ -1,6 +1,4 @@
 #Directories
 bin
 obj
-
-#Files
-*/.vs
+.vs/
