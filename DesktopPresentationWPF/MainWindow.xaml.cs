@@ -14,18 +14,22 @@ namespace DesktopPresentationWPF {
             InitializeComponent();
         }
 
-        private string GetData() {
+        private WpfProductModel GetData() {
             HttpClient client = new HttpClient {
-                BaseAddress = new Uri("http://localhost:2618/Api/") // BaseAddress = new Uri("http://localhost:2021/");
-                // Error 404: Ya probado con 2618/, 2618/api, 2618/api/, api con mayúsculas y minúsculas...
+                BaseAddress = new Uri("http://localhost:2021/Api/")
             };
 
             // TODO: Cambiar GetStringAsync por GetAsync y SERIALIZAR!
 
             // Add an Accept header for JSON format.
+            client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var response = client.GetStringAsync("Product/1").Result; // ("api/Product/1").Result;
-            return response;
+
+            var response = client.GetAsync("Product/1").Result;
+
+            var prod = response.Content.ReadAsAsync<WpfProductModel>().Result;
+
+            return prod;
         }
 
         // Client
@@ -33,7 +37,8 @@ namespace DesktopPresentationWPF {
 
         private void GetConsulta_Click(object sender, RoutedEventArgs e) {
             // Consult from API and Modify Textbox
-            consultaName.Text = GetData();
+            WpfProductModel prod = GetData();
+            consultaName.Text = prod.Id + " " + prod.ProductName + " Stock: " + prod.Quantity + " Price: " + prod.Price + " Vendor: " + prod.VendorId;
         }
 
         private void ShowConsulta_Click(object sender, RoutedEventArgs e) {
