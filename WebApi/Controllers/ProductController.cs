@@ -18,6 +18,9 @@ namespace WebApi.Controllers
 
 
         // GET api/Product/
+        /// <summary>
+        /// Retrives all product intances
+        /// </summary>
         public IHttpActionResult Get()
         {
             var products = _unitOfWork.Products.GetAll();
@@ -27,6 +30,9 @@ namespace WebApi.Controllers
 
 
         // GET api/Product/5
+        /// <summary>
+        /// Retrives an specific product
+        /// </summary>
         [ResponseType(typeof(Product))]
         public IHttpActionResult Get(int id)
         {

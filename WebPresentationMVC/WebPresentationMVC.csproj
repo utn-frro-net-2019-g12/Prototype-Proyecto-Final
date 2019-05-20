@@ -136,6 +136,7 @@
     </Compile>
     <Compile Include="GlobalVariables.cs" />
     <Compile Include="Models\MvcProductModel.cs" />
+    <Compile Include="Models\MvcVendorModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

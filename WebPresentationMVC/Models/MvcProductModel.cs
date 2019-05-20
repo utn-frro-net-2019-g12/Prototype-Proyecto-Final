@@ -13,5 +13,7 @@ namespace WebPresentationMVC.Models
         public int? Quantity { get; set; }
         public int? Price { get; set; }
         public int? VendorId { get; set; }
+
+        public virtual MvcVendorModel Vendor { get; set; }
     }
 }
