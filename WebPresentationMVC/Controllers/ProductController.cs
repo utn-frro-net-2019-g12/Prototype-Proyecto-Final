@@ -35,6 +35,8 @@ namespace WebPresentationMVC.Controllers
         public ActionResult Delete(int id)
         {
             var response = GlobalVariables.WebApiClient.DeleteAsync("Product/" + id.ToString()).Result;
+
+            // Search what is TempData!
             TempData["SuccessMessage"] = "Deleted Sucessfully";
 
             return RedirectToAction("Index");

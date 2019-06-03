@@ -10,7 +10,7 @@ namespace DataAccessLayer
     {
         public Vendor()
         {
-            Products = new HashSet<Product>();
+            //Products = new HashSet<Product>();
         }
 
         public int Id { get; set; }
@@ -18,6 +18,6 @@ namespace DataAccessLayer
         public string Name { get; set; }
         public string Adress { get; set; }
 
-        public virtual ICollection<Product> Products { get; set; }
+        //public virtual ICollection<Product> Products { get; set; }
     }
 }

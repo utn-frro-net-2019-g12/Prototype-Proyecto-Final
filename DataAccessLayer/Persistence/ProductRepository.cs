@@ -14,7 +14,8 @@ namespace DataAccessLayer.Persistence
         {
         }
 
-        public PrototipoConsultaUTNContext PrototipoConsultaUTNContext {
+        public PrototipoConsultaUTNContext PrototipoConsultaUTNContext
+        {
             get
             {
                 return Context as PrototipoConsultaUTNContext;
@@ -25,6 +26,11 @@ namespace DataAccessLayer.Persistence
         {
             return PrototipoConsultaUTNContext.Products.OrderByDescending(p => p.Quantity).Take(count).ToList();
 
+        }
+
+        public IEnumerable<Product> GetProductsWithVendor()
+        {
+            return PrototipoConsultaUTNContext.Products.Include(e => e.Vendor);
         }
     }
 }

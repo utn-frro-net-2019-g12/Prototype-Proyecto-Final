@@ -10,20 +10,32 @@ using System.Web.Http.Description;
 using System.Web.Http.Results;
 using DataAccessLayer;
 
+
 namespace WebApi.Controllers
 {
+    [RoutePrefix("api/product")]
     public class ProductController : ApiController
     {
         private UnitOfWork _unitOfWork = new UnitOfWork(new PrototipoConsultaUTNContext());
 
 
-        // GET api/Product/
+        
         /// <summary>
         /// Retrives all product intances
         /// </summary>
+        [HttpGet]
         public IHttpActionResult Get()
         {
             var products = _unitOfWork.Products.GetAll();
+
+            return Ok(products);
+        }
+
+        [HttpGet]
+        [Route("productsWithVendor")]
+        public IHttpActionResult GetProductsWithVendor()
+        {
+            var products = _unitOfWork.Products.GetProductsWithVendor();
 
             return Ok(products);
         }
@@ -33,6 +45,8 @@ namespace WebApi.Controllers
         /// <summary>
         /// Retrives an specific product
         /// </summary>
+        [HttpGet]
+        [Route("{id:int}")]
         [ResponseType(typeof(Product))]
         public IHttpActionResult Get(int id)
         {
@@ -49,6 +63,7 @@ namespace WebApi.Controllers
 
         // Remember to include { Content-Type: application/json } in Request Body when consuming
         // POST api/Product/
+        [HttpPost]
         [ResponseType(typeof(Product))]
         public IHttpActionResult Post([FromBody] Product product)
         {
@@ -70,11 +85,13 @@ namespace WebApi.Controllers
 
         // DELETE api/Product/5
         [Authorize]
+        [HttpDelete]
         [ResponseType(typeof(Product))]
         public IHttpActionResult Delete(int id)
         {
             try
             {
+                // TO-DO: return errors in http format
                 var product = _unitOfWork.Products.Get(id);
                 if (product == null)
                 {
@@ -97,6 +114,7 @@ namespace WebApi.Controllers
         // Remember to include { Content-Type: application/json } and state the ProductId in in Request Body when consuming
         // The Query String id (api/product/{id}) has to match ProductId from Request Body
         // PUT api/Product/5
+        [HttpPut]
         [ResponseType(typeof(Product))]
         public IHttpActionResult Put(int id, [FromBody] Product sentProduct)
         {
@@ -105,26 +123,14 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
 
-            // This line modificates the content of the product that equals to sentProd(same id)
-            //db.Entry(sentProduct).State = EntityState.Modified;
+            if (_unitOfWork.Products.Get(id) == null)
+            {
+                return NotFound();
+            }
+
             _unitOfWork.Products.Update(sentProduct);
 
-            try
-            {
-                _unitOfWork.Complete();
-            }
-            // Its possible that this doesn't affect any rows(that why the exception) because of some concurrrency problem or the product doesn't exist in db actually
-            catch (DbUpdateConcurrencyException)
-            {
-                if (_unitOfWork.Products.Get(id) == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _unitOfWork.Complete();   
 
             return StatusCode(HttpStatusCode.NoContent);
         }
