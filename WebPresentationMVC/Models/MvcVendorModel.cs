@@ -9,7 +9,7 @@ namespace WebPresentationMVC.Models
     {
         public MvcVendorModel()
         {
-            Products = new HashSet<MvcProductModel>();
+            //Products = new HashSet<MvcProductModel>();
         }
 
         public int Id { get; set; }
@@ -17,6 +17,7 @@ namespace WebPresentationMVC.Models
         public string Name { get; set; }
         public string Adress { get; set; }
 
-        public virtual ICollection<MvcProductModel> Products { get; set; }
+        // TO-DO: Fix circular reference
+        //public virtual ICollection<MvcProductModel> Products { get; set; }
     }
 }

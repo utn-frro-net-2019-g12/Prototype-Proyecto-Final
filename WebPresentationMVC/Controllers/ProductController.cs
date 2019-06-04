@@ -13,7 +13,7 @@ namespace WebPresentationMVC.Controllers
         // GET: Product
         public ActionResult Index()
         {
-            var response = GlobalVariables.WebApiClient.GetAsync("Product").Result;
+            var response = GlobalVariables.WebApiClient.GetAsync("products/vendor").Result;
 
             IEnumerable<MvcProductModel> productList = response.Content.ReadAsAsync<IEnumerable<MvcProductModel>>().Result;
 
@@ -23,7 +23,7 @@ namespace WebPresentationMVC.Controllers
 
         public ActionResult Details(int id)
         {
-            var response = GlobalVariables.WebApiClient.GetAsync("Product/" + id.ToString()).Result;
+            var response = GlobalVariables.WebApiClient.GetAsync("products/" + id.ToString() + "/vendor").Result;
 
             var product = response.Content.ReadAsAsync<MvcProductModel>().Result;
     
@@ -34,7 +34,7 @@ namespace WebPresentationMVC.Controllers
         // DELETE Product/5
         public ActionResult Delete(int id)
         {
-            var response = GlobalVariables.WebApiClient.DeleteAsync("Product/" + id.ToString()).Result;
+            var response = GlobalVariables.WebApiClient.DeleteAsync("Products/" + id.ToString()).Result;
 
             // Search what is TempData!
             TempData["SuccessMessage"] = "Deleted Sucessfully";

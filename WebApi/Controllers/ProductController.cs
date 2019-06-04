@@ -13,7 +13,7 @@ using DataAccessLayer;
 
 namespace WebApi.Controllers
 {
-    [RoutePrefix("api/product")]
+    [RoutePrefix("api/products")]
     public class ProductController : ApiController
     {
         private UnitOfWork _unitOfWork = new UnitOfWork(new PrototipoConsultaUTNContext());
@@ -24,7 +24,8 @@ namespace WebApi.Controllers
         /// Retrives all product intances
         /// </summary>
         [HttpGet]
-        public IHttpActionResult Get()
+        [Route("")]
+        public IHttpActionResult GetAll()
         {
             var products = _unitOfWork.Products.GetAll();
 
@@ -32,7 +33,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("productsWithVendor")]
+        [Route("vendor")]
         public IHttpActionResult GetProductsWithVendor()
         {
             var products = _unitOfWork.Products.GetProductsWithVendor();
@@ -60,10 +61,26 @@ namespace WebApi.Controllers
             return Ok(product);
         }
 
+        [HttpGet]
+        [Route("{id:int}/vendor")]
+        [ResponseType(typeof(Product))]
+        public IHttpActionResult GetProductWithVendor(int id)
+        {
+            var product = _unitOfWork.Products.GetProductWithVendor(id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(product);
+        }
+
 
         // Remember to include { Content-Type: application/json } in Request Body when consuming
-        // POST api/Product/
+        // TO-DO: Fix CreatedAtRoute error
         [HttpPost]
+        [Route("")]
         [ResponseType(typeof(Product))]
         public IHttpActionResult Post([FromBody] Product product)
         {
@@ -83,9 +100,9 @@ namespace WebApi.Controllers
         }
 
 
-        // DELETE api/Product/5
         [Authorize]
         [HttpDelete]
+        [Route("{id:int}")]
         [ResponseType(typeof(Product))]
         public IHttpActionResult Delete(int id)
         {
@@ -113,8 +130,8 @@ namespace WebApi.Controllers
 
         // Remember to include { Content-Type: application/json } and state the ProductId in in Request Body when consuming
         // The Query String id (api/product/{id}) has to match ProductId from Request Body
-        // PUT api/Product/5
         [HttpPut]
+        [Route("{id:int}")]
         [ResponseType(typeof(Product))]
         public IHttpActionResult Put(int id, [FromBody] Product sentProduct)
         {
@@ -123,14 +140,24 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
 
-            if (_unitOfWork.Products.Get(id) == null)
+            try
             {
-                return NotFound();
+                _unitOfWork.Products.Update(sentProduct);
+
+                _unitOfWork.Complete();
             }
-
-            _unitOfWork.Products.Update(sentProduct);
-
-            _unitOfWork.Complete();   
+            catch(Exception)
+            {
+                if (_unitOfWork.Products.Get(id) == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                } 
+            }
+            
 
             return StatusCode(HttpStatusCode.NoContent);
         }

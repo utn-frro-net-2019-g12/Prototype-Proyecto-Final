@@ -14,7 +14,7 @@ namespace DataAccessLayer
 
             var vendors = new List<Vendor>
             {
-                new Vendor{Name = "Serenisima", Adress = "Adroge 1545, Santa Teresita"}
+                new Vendor{Name = "La Serenisima", Adress = "Adroge 1545, Santa Teresita"}
             };
 
             unitOfWork.Vendors.AddRange(vendors);

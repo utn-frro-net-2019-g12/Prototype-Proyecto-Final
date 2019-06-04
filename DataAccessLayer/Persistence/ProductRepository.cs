@@ -32,5 +32,24 @@ namespace DataAccessLayer.Persistence
         {
             return PrototipoConsultaUTNContext.Products.Include(e => e.Vendor);
         }
+
+        public Object GetProductWithVendor(int id)
+        {
+            // Maybe a join can solve this
+            var product = from p in PrototipoConsultaUTNContext.Products
+                          join v in PrototipoConsultaUTNContext.Vendors on p.VendorId equals v.Id
+                          where p.Id == id
+                          select new
+                          {
+                              p.Id,
+                              p.ProductName,
+                              p.Quantity,
+                              p.Price,
+                              p.VendorId,
+                              p.Vendor
+                          };
+
+            return product.FirstOrDefault();
+        }
     }
 }
