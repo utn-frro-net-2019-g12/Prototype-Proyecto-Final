@@ -53,9 +53,9 @@ namespace DataAccessLayer.Persistence
             PrototipoConsultaUTNContext.Database.Log = message => Trace.Write(message);
             
             // 15-20 ms uses composed select
-            //var product = PrototipoConsultaUTNContext.Products.Where(e => e.Id == id).Include(p => p.Vendor).FirstOrDefault();
+            //var product = PrototipoConsultaUTNContext.Products.Where(e => e.Id == id).Include(p => p.Vendor);
 
-            return product;
+            return product.FirstOrDefault();
         }
     }
 }
