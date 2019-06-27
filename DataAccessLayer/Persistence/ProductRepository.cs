@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ namespace DataAccessLayer.Persistence
 
         public Object GetProductWithVendor(int id)
         {
-            // Maybe a join can solve this
+            // 10-16 ms uses a more sofisticated join method
             var product = from p in PrototipoConsultaUTNContext.Products
                           join v in PrototipoConsultaUTNContext.Vendors on p.VendorId equals v.Id
                           where p.Id == id
@@ -49,7 +50,12 @@ namespace DataAccessLayer.Persistence
                               p.Vendor
                           };
 
-            return product.FirstOrDefault();
+            PrototipoConsultaUTNContext.Database.Log = message => Trace.Write(message);
+            
+            // 15-20 ms uses composed select
+            //var product = PrototipoConsultaUTNContext.Products.Where(e => e.Id == id).Include(p => p.Vendor).FirstOrDefault();
+
+            return product;
         }
     }
 }
