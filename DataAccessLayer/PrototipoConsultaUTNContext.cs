@@ -15,8 +15,9 @@ namespace DataAccessLayer
  
         public PrototipoConsultaUTNContext() : base("name=PrototipoConsultaUTNContext")
         {
-            this.Configuration.LazyLoadingEnabled = false;
             Database.SetInitializer<PrototipoConsultaUTNContext>(new PrototipoConsultaUTNInitializer());
+            this.Configuration.LazyLoadingEnabled = false;
+            this.Configuration.ProxyCreationEnabled = false;
         }
     }
 }

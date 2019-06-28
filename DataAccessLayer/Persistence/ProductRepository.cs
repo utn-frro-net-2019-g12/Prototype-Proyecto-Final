@@ -37,7 +37,7 @@ namespace DataAccessLayer.Persistence
         public Object GetProductWithVendor(int id)
         {
             // 10-16 ms uses a more sofisticated join method
-            var product = from p in PrototipoConsultaUTNContext.Products
+            /*var product = from p in PrototipoConsultaUTNContext.Products
                           join v in PrototipoConsultaUTNContext.Vendors on p.VendorId equals v.Id
                           where p.Id == id
                           select new
@@ -48,12 +48,12 @@ namespace DataAccessLayer.Persistence
                               p.Price,
                               p.VendorId,
                               p.Vendor
-                          };
+                          };*/
 
             PrototipoConsultaUTNContext.Database.Log = message => Trace.Write(message);
             
             // 15-20 ms uses composed select
-            //var product = PrototipoConsultaUTNContext.Products.Where(e => e.Id == id).Include(p => p.Vendor);
+            var product = PrototipoConsultaUTNContext.Products.Where(e => e.Id == id).Include(p => p.Vendor);
 
             return product.FirstOrDefault();
         }

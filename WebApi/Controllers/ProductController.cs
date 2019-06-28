@@ -19,7 +19,7 @@ namespace WebApi.Controllers
         private UnitOfWork _unitOfWork = new UnitOfWork(new PrototipoConsultaUTNContext());
 
 
-        
+
         /// <summary>
         /// Retrives all product intances
         /// </summary>
@@ -80,7 +80,7 @@ namespace WebApi.Controllers
         // Remember to include { Content-Type: application/json } in Request Body when consuming
         // TO-DO: Fix CreatedAtRoute error
         [HttpPost]
-        [Route("")]
+        [Route("", Name = "name")]
         [ResponseType(typeof(Product))]
         public IHttpActionResult Post([FromBody] Product product)
         {
@@ -89,7 +89,7 @@ namespace WebApi.Controllers
                 _unitOfWork.Products.Add(product);
                 _unitOfWork.Complete();
 
-                return CreatedAtRoute("DefaultApi", new { id = product.Id }, product);
+                return CreatedAtRoute("name", new { id = product.Id }, product);
             }
             catch (Exception ex)
             {
@@ -126,7 +126,6 @@ namespace WebApi.Controllers
                 return BadRequest(ex.ToString());
             }
         }
-
 
         // Remember to include { Content-Type: application/json } and state the ProductId in in Request Body when consuming
         // The Query String id (api/product/{id}) has to match ProductId from Request Body
