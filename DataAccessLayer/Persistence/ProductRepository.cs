@@ -31,7 +31,7 @@ namespace DataAccessLayer.Persistence
 
         public IEnumerable<Product> GetProductsWithVendor()
         {
-            return PrototipoConsultaUTNContext.Products.Include(e => e.Vendor);
+            return PrototipoConsultaUTNContext.Products.Include(e => e.Vendors);
         }
 
         public Object GetProductWithVendor(int id)
@@ -53,7 +53,7 @@ namespace DataAccessLayer.Persistence
             PrototipoConsultaUTNContext.Database.Log = message => Trace.Write(message);
             
             // 15-20 ms uses composed select
-            var product = PrototipoConsultaUTNContext.Products.Where(e => e.Id == id).Include(p => p.Vendor);
+            var product = PrototipoConsultaUTNContext.Products.Where(e => e.Id == id).Include(p => p.Vendors);
 
             return product.FirstOrDefault();
         }

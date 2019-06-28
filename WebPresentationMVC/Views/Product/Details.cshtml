@@ -43,19 +43,19 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Vendor.Name)
+            @Html.DisplayNameFor(model => model.Vendors.FirstOrDefault().Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Vendor.Name)
+            @Html.DisplayFor(model => model.Vendors.FirstOrDefault().Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Vendor.Adress)
+            @Html.DisplayNameFor(model => model.Vendors.FirstOrDefault().Adress)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Vendor.Adress)
+            @Html.DisplayFor(model => model.Vendors.FirstOrDefault().Adress)
         </dd>
 
     </dl>

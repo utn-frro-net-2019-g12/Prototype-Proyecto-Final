@@ -9,6 +9,10 @@ namespace DataAccessLayer
 {
     public class Product
     {
+        public Product()
+        {
+            Vendors = new HashSet<Vendor>();
+        }
         public int Id { get; set; }
 
         public string ProductName { get; set; }
@@ -16,8 +20,6 @@ namespace DataAccessLayer
         public int? Price { get; set; }
 
         // Use another type of LINQ query to return this product and its Vendor
-        [ForeignKey("Vendor")]
-        public int? VendorId { get; set; }
-        public virtual Vendor Vendor { get; set; }
+        public virtual ICollection<Vendor> Vendors { get; set; }
     }
 }

@@ -24,7 +24,7 @@
             @Html.DisplayNameFor(model => model.Price)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Vendor.Name)
+            @Html.DisplayNameFor(model => model.Vendors.FirstOrDefault().Name)
         </th>
         <th></th>
     </tr>
@@ -44,7 +44,7 @@
             @Html.DisplayFor(modelItem => item.Price)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Vendor.Name)
+            @Html.DisplayFor(modelItem => item.Vendors.FirstOrDefault().Name)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |

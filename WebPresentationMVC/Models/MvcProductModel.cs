@@ -7,6 +7,10 @@ namespace WebPresentationMVC.Models
 {
     public class MvcProductModel
     {
+        public MvcProductModel()
+        {
+            Vendors = new HashSet<MvcVendorModel>();
+        }
         public int Id { get; set; }
 
         public string ProductName { get; set; }
@@ -14,6 +18,6 @@ namespace WebPresentationMVC.Models
         public int? Price { get; set; }
         public int? VendorId { get; set; }
 
-        public virtual MvcVendorModel Vendor { get; set; }
+        public virtual ICollection<MvcVendorModel> Vendors { get; set; }
     }
 }
