@@ -34,7 +34,7 @@ namespace DataAccessLayer.Persistence
             return PrototipoConsultaUTNContext.Products.Include(e => e.Vendor);
         }
 
-        public Object GetProductWithVendor(int id)
+        public Product GetProductWithVendor(int id)
         {
             // 10-16 ms uses a more sofisticated join method
             /*var product = from p in PrototipoConsultaUTNContext.Products

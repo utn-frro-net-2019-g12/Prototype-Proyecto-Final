@@ -6,6 +6,6 @@ namespace DataAccessLayer.Repositories
     {
         IEnumerable<Product> GetProductsWithMoreStock(int count);
         IEnumerable<Product> GetProductsWithVendor();
-        object GetProductWithVendor(int id);
+        Product GetProductWithVendor(int id);
     }
 }

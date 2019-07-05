@@ -14,10 +14,9 @@ using DataAccessLayer;
 namespace WebApi.Controllers
 {
     [RoutePrefix("api/products")]
-    public class ProductController : ApiController
+    public class ProductApiController : ApiController
     {
         private UnitOfWork _unitOfWork = new UnitOfWork(new PrototipoConsultaUTNContext());
-
 
 
         /// <summary>
@@ -78,7 +77,6 @@ namespace WebApi.Controllers
 
 
         // Remember to include { Content-Type: application/json } in Request Body when consuming
-        // TO-DO: Fix CreatedAtRoute error
         [HttpPost]
         [Route("", Name = "name")]
         [ResponseType(typeof(Product))]
@@ -86,6 +84,11 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 _unitOfWork.Products.Add(product);
                 _unitOfWork.Complete();
 
