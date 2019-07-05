@@ -144,8 +144,12 @@ namespace WebApi.Controllers
 
             try
             {
-                _unitOfWork.Products.Update(sentProduct);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
+                _unitOfWork.Products.Update(sentProduct);
                 _unitOfWork.Complete();
             }
             catch(Exception)

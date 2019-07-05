@@ -12,7 +12,9 @@ namespace DataAccessLayer
     {
         public int Id { get; set; }
 
+        [Required]
         [StringLength(15)]
+        [MinLength(3)]
         public string ProductName { get; set; }
         public int? Quantity { get; set; }
         [Required]

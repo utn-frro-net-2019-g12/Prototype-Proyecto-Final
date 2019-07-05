@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -61,11 +62,20 @@ namespace WebPresentationMVC.Controllers
         {
             var response = GlobalVariables.WebApiClient.PostAsJsonAsync("products", product).Result;
 
+            // Move this to an action filter
             if (!response.IsSuccessStatusCode)
             {
-                var modelState = response.Content.ReadAsAsync<ModelState>().Result;
+                var httpError = response.Content.ReadAsAsync<JObject>().Result;
 
-                
+                var errors = httpError["ModelState"];
+
+                foreach (var error in errors.Skip(1))
+                {
+                    foreach (var message in error)
+                    {
+                        ModelState.AddModelError("", message.ToString().Trim('[',']').Replace('"',' '));
+                    }
+                }
 
                 return View(product);
             }
@@ -101,9 +111,20 @@ namespace WebPresentationMVC.Controllers
         {
             var response = GlobalVariables.WebApiClient.PutAsJsonAsync("products/" + product.Id, product).Result;
 
+            // Move this to an action filter
             if (!response.IsSuccessStatusCode)
             {
-                var modelState = response.Content.ReadAsAsync<ModelState>().Result;
+                var httpError = response.Content.ReadAsAsync<JObject>().Result;
+
+                var errors = httpError["ModelState"];
+
+                foreach (var error in errors.Skip(1))
+                {
+                    foreach (var message in error)
+                    {
+                        ModelState.AddModelError("", message.ToString().Trim('[', ']').Replace('"', ' '));
+                    }
+                }
 
                 return View(product);
             }
