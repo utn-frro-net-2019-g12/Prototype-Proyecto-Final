@@ -16,7 +16,7 @@ namespace WebPresentationMVC.Controllers
         // GET: Product
         public ActionResult Index()
         {
-            var response = GlobalVariables.WebApiClient.GetAsync("products/vendor").Result;
+            var response = GlobalApi.WebApiClient.GetAsync("products/vendor").Result;
 
             IEnumerable<MvcProductModel> productList = response.Content.ReadAsAsync<IEnumerable<MvcProductModel>>().Result;
 
@@ -26,7 +26,7 @@ namespace WebPresentationMVC.Controllers
 
         public ActionResult Details(int id)
         {
-            var response = GlobalVariables.WebApiClient.GetAsync("products/" + id.ToString() + "/vendor").Result;
+            var response = GlobalApi.WebApiClient.GetAsync("products/" + id.ToString() + "/vendor").Result;
 
             if (!response.IsSuccessStatusCode)
             {
@@ -42,7 +42,7 @@ namespace WebPresentationMVC.Controllers
         // DELETE Product/5
         public ActionResult Delete(int id)
         {
-            var response = GlobalVariables.WebApiClient.DeleteAsync("products/" + id.ToString()).Result;
+            var response = GlobalApi.WebApiClient.DeleteAsync("products/" + id.ToString()).Result;
 
             // Search what is TempData!
             TempData["SuccessMessage"] = "Deleted Sucessfully";
@@ -60,22 +60,12 @@ namespace WebPresentationMVC.Controllers
         [HttpPost]
         public ActionResult Create(MvcProductModel product)
         {
-            var response = GlobalVariables.WebApiClient.PostAsJsonAsync("products", product).Result;
+            var response = GlobalApi.WebApiClient.PostAsJsonAsync("products", product).Result;
 
             // Move this to an action filter
             if (!response.IsSuccessStatusCode)
             {
-                var httpError = response.Content.ReadAsAsync<JObject>().Result;
-
-                var errors = httpError["ModelState"];
-
-                foreach (var error in errors.Skip(1))
-                {
-                    foreach (var message in error)
-                    {
-                        ModelState.AddModelError("", message.ToString().Trim('[',']').Replace('"',' '));
-                    }
-                }
+                ModelStateApi.AddErrors(response, ModelState);
 
                 return View(product);
             }
@@ -92,7 +82,7 @@ namespace WebPresentationMVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var response = GlobalVariables.WebApiClient.GetAsync("products/" + id).Result;
+            var response = GlobalApi.WebApiClient.GetAsync("products/" + id).Result;
 
             if (!response.IsSuccessStatusCode)
             {
@@ -109,22 +99,11 @@ namespace WebPresentationMVC.Controllers
         // Bind(Include = "...") is used to avoid overposting attacks
         public ActionResult Edit([Bind(Include = "Id, ProductName, Quantity, Price, VendorId")]MvcProductModel product)
         {
-            var response = GlobalVariables.WebApiClient.PutAsJsonAsync("products/" + product.Id, product).Result;
+            var response = GlobalApi.WebApiClient.PutAsJsonAsync("products/" + product.Id, product).Result;
 
-            // Move this to an action filter
             if (!response.IsSuccessStatusCode)
             {
-                var httpError = response.Content.ReadAsAsync<JObject>().Result;
-
-                var errors = httpError["ModelState"];
-
-                foreach (var error in errors.Skip(1))
-                {
-                    foreach (var message in error)
-                    {
-                        ModelState.AddModelError("", message.ToString().Trim('[', ']').Replace('"', ' '));
-                    }
-                }
+                ModelStateApi.AddErrors(response, ModelState);
 
                 return View(product);
             }
