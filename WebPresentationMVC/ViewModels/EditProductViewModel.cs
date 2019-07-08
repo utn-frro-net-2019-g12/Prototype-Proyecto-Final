@@ -7,13 +7,15 @@ using WebPresentationMVC.Models;
 
 namespace WebPresentationMVC.ViewModels
 {
-    public class CreateProductViewModel
+    public class EditProductViewModel
     {
-        public CreateProductViewModel() { }
+        public EditProductViewModel() { }
 
-        public CreateProductViewModel(IEnumerable<MvcVendorModel> vendors)
+        public EditProductViewModel(IEnumerable<MvcVendorModel> vendors, MvcProductModel product)
         {
             this.SetVendorsAsSelectList(vendors);
+
+            this.Product = product;
         }
 
         public MvcProductModel Product { get; set; }

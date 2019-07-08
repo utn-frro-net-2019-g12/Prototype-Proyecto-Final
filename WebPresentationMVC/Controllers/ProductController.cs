@@ -14,16 +14,6 @@ namespace WebPresentationMVC.Controllers
 {
     public class ProductController : Controller
     {
-        private IEnumerable<MvcVendorModel> vendors;
-
-        public ProductController()
-        {
-            var response = GlobalApi.WebApiClient.GetAsync("vendors").Result;
-
-            vendors = response.Content.ReadAsAsync<IEnumerable<MvcVendorModel>>().Result;
-        }
-  
-
         // GET: Product
         public ActionResult Index()
         {
@@ -65,21 +55,25 @@ namespace WebPresentationMVC.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            var viewModel = new CreateProductViewModel(vendors, null);
+            var vendors = GetVendors();
+
+            var viewModel = new CreateProductViewModel(vendors);
 
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult Create(MvcProductModel product)
+        public ActionResult Create(CreateProductViewModel viewModel)
         {
-            var response = GlobalApi.WebApiClient.PostAsJsonAsync("products", product).Result;
-
-            var viewModel = new CreateProductViewModel(vendors, product);
+            var response = GlobalApi.WebApiClient.PostAsJsonAsync("products", viewModel.Product).Result;
 
             // Move this to an action filter
             if (!response.IsSuccessStatusCode)
             {
+                var vendors = GetVendors();
+
+                viewModel.SetVendorsAsSelectList(vendors);
+
                 ModelStateApi.AddErrors(response, ModelState);
 
                 return View(viewModel);
@@ -106,24 +100,39 @@ namespace WebPresentationMVC.Controllers
 
             MvcProductModel product = response.Content.ReadAsAsync<MvcProductModel>().Result;
 
-            return View(product);
+            var vendors = GetVendors();
+
+            var viewModel = new EditProductViewModel(vendors, product);
+
+            return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // Bind(Include = "...") is used to avoid overposting attacks
-        public ActionResult Edit([Bind(Include = "Id, ProductName, Quantity, Price, VendorId")]MvcProductModel product)
+        // TO-DO use Bind(Include = "...") is used to avoid overposting attacks
+        public ActionResult Edit(EditProductViewModel viewModel)
         {
-            var response = GlobalApi.WebApiClient.PutAsJsonAsync("products/" + product.Id, product).Result;
+            var response = GlobalApi.WebApiClient.PutAsJsonAsync("products/" + viewModel.Product.Id, viewModel.Product).Result;
 
             if (!response.IsSuccessStatusCode)
             {
+                var vendors = GetVendors();
+
+                viewModel.SetVendorsAsSelectList(vendors);
+
                 ModelStateApi.AddErrors(response, ModelState);
 
-                return View(product);
+                return View(viewModel);
             }
 
             return RedirectToAction("Index");
+        }
+
+        public IEnumerable<MvcVendorModel> GetVendors()
+        {
+            var response = GlobalApi.WebApiClient.GetAsync("vendors").Result;
+
+            return response.Content.ReadAsAsync<IEnumerable<MvcVendorModel>>().Result;
         }
     }
 }
