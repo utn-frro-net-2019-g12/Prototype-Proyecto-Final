@@ -8,11 +8,22 @@ using System.Net.Http.Formatting;
 using System.Web;
 using System.Web.Mvc;
 using WebPresentationMVC.Models;
+using WebPresentationMVC.ViewModels;
 
 namespace WebPresentationMVC.Controllers
 {
     public class ProductController : Controller
     {
+        private IEnumerable<MvcVendorModel> vendors;
+
+        public ProductController()
+        {
+            var response = GlobalApi.WebApiClient.GetAsync("vendors").Result;
+
+            vendors = response.Content.ReadAsAsync<IEnumerable<MvcVendorModel>>().Result;
+        }
+  
+
         // GET: Product
         public ActionResult Index()
         {
@@ -54,7 +65,9 @@ namespace WebPresentationMVC.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            return View();
+            var viewModel = new CreateProductViewModel(vendors, null);
+
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -62,12 +75,14 @@ namespace WebPresentationMVC.Controllers
         {
             var response = GlobalApi.WebApiClient.PostAsJsonAsync("products", product).Result;
 
+            var viewModel = new CreateProductViewModel(vendors, product);
+
             // Move this to an action filter
             if (!response.IsSuccessStatusCode)
             {
                 ModelStateApi.AddErrors(response, ModelState);
 
-                return View(product);
+                return View(viewModel);
             }
 
             return RedirectToAction("Index");

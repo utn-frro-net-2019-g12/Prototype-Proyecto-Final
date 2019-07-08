@@ -78,7 +78,7 @@ namespace WebApi.Controllers
 
         // Remember to include { Content-Type: application/json } in Request Body when consuming
         [HttpPost]
-        [Route("", Name = "name")]
+        [Route("", Name = "postProduct")]
         [ResponseType(typeof(Product))]
         public IHttpActionResult Post([FromBody] Product product)
         {
@@ -92,7 +92,7 @@ namespace WebApi.Controllers
                 _unitOfWork.Products.Add(product);
                 _unitOfWork.Complete();
 
-                return CreatedAtRoute("name", new { id = product.Id }, product);
+                return CreatedAtRoute("postProduct", new { id = product.Id }, product);
             }
             catch (Exception ex)
             {

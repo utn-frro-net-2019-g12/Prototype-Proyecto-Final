@@ -1,11 +1,8 @@
 ﻿using DataAccessLayer.Repositories;
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayer.Persistence
 {
@@ -53,7 +50,7 @@ namespace DataAccessLayer.Persistence
             PrototipoConsultaUTNContext.Database.Log = message => Trace.Write(message);
             
             // 15-20 ms uses composed select
-            var product = PrototipoConsultaUTNContext.Products.Where(e => e.Id == id).Include(p => p.Vendor);
+            var product = PrototipoConsultaUTNContext.Products.Include(p => p.Vendor).Where(e => e.Id == id);
 
             return product.FirstOrDefault();
         }

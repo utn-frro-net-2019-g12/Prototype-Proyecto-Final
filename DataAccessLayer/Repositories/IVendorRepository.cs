@@ -8,6 +8,7 @@ namespace DataAccessLayer.Repositories
 {
     public interface IVendorRepository : IRepository<Vendor>
     {
-        IEnumerable<Vendor> GetVendorsWithProducts(int id);
+        IEnumerable<Vendor> GetVendorsWithProducts();
+        Vendor GetVendorWithProducts(int id);
     }
 }

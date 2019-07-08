@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -12,6 +13,7 @@ namespace WebPresentationMVC.Models
         public string ProductName { get; set; }
         public int? Quantity { get; set; }
         public int? Price { get; set; }
+        [Display(Name = "Vendor")]
         public int? VendorId { get; set; }
 
         public virtual MvcVendorModel Vendor { get; set; }

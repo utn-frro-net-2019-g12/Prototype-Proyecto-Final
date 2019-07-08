@@ -1,9 +1,8 @@
 ﻿using DataAccessLayer.Repositories;
-using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayer.Persistence
 {
@@ -21,10 +20,16 @@ namespace DataAccessLayer.Persistence
             }
         }
 
-        public IEnumerable<Vendor> GetVendorsWithProducts(int id)
+        public IEnumerable<Vendor> GetVendorsWithProducts()
         {
-            throw new NotImplementedException();
-            //return PrototipoConsultaUTNContext.Vendors.Where(e => e.Products != null).OrderBy(e => e.Name).ToList();
+            return PrototipoConsultaUTNContext.Vendors.Include(e => e.Products).OrderBy(e => e.Name).ToList();
+        }
+
+        public Vendor GetVendorWithProducts(int id)
+        {
+            PrototipoConsultaUTNContext.Database.Log = message => Trace.Write(message);
+
+            return PrototipoConsultaUTNContext.Vendors.Where(e => e.Id == id).Include(e => e.Products).FirstOrDefault();
         }
     }
 }
