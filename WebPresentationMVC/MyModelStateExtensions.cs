@@ -18,7 +18,7 @@ namespace WebPresentationMVC
             foreach (JProperty error in errors.Skip(1))
             {
                 // This decouples the name sent by the api from the one that's used to add a modelError
-                string errorKey = "product." + error.Name.Substring(error.Name.IndexOf('.') + 1);
+                string errorKey = modelState.Keys.Where(e => e.Contains(error.Name.Substring(error.Name.IndexOf('.') + 1))).FirstOrDefault();
                 foreach (JArray messages in error)
                 {
                     foreach (string message in messages)
