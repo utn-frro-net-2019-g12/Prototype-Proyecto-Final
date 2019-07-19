@@ -45,7 +45,7 @@ namespace WebPresentationMVC.Controllers
         {
             var response = GlobalApi.WebApiClient.DeleteAsync("products/" + id.ToString()).Result;
 
-            // Search what is TempData!
+            // Handle this better
             TempData["SuccessMessage"] = "Deleted Sucessfully";
 
             return RedirectToAction("Index");
@@ -74,7 +74,7 @@ namespace WebPresentationMVC.Controllers
 
                 viewModel.SetVendorsAsSelectList(vendors);
 
-                ModelStateApi.AddErrors(response, ModelState);
+                ModelState.AddModelErrorsFromResponse(response);
 
                 return View(viewModel);
             }
@@ -120,7 +120,7 @@ namespace WebPresentationMVC.Controllers
 
                 viewModel.SetVendorsAsSelectList(vendors);
 
-                ModelStateApi.AddErrors(response, ModelState);
+                ModelState.AddModelErrorsFromResponse(response);
 
                 return View(viewModel);
             }
