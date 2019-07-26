@@ -34,8 +34,8 @@ namespace DataAccessLayer.Persistence
         public Product GetProductWithVendor(int id)
         {
             // 10-16 ms uses a more sofisticated join method
-            /*var product = from p in PrototipoConsultaUTNContext.Products
-                          join v in PrototipoConsultaUTNContext.Vendors on p.VendorId equals v.Id
+            /*var product = from p in PrototipoConsultaUTNContext.ProductsRepository
+                          join v in PrototipoConsultaUTNContext.VendorsRepository on p.VendorId equals v.Id
                           where p.Id == id
                           select new
                           {

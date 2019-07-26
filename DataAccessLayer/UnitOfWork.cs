@@ -13,14 +13,14 @@ namespace DataAccessLayer
     {
         private readonly PrototipoConsultaUTNContext _context;
 
-        public IProductRepository Products { get; private set; }
-        public IVendorRepository Vendors { get; private set; }
+        public IProductRepository ProductsRepository { get; private set; }
+        public IVendorRepository VendorsRepository { get; private set; }
 
         public UnitOfWork(PrototipoConsultaUTNContext context)
         {
             _context = context;
-            Products = new ProductRepository(_context);
-            Vendors = new VendorRepository(_context);
+            ProductsRepository = new ProductRepository(_context);
+            VendorsRepository = new VendorRepository(_context);
         }
 
         // Add DBConcurrencyException here

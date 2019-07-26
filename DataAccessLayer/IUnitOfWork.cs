@@ -5,8 +5,8 @@ namespace DataAccessLayer
 {
     public interface IUnitOfWork : IDisposable
     {
-        IProductRepository Products { get; }
-        IVendorRepository Vendors { get; }
+        IProductRepository ProductsRepository { get; }
+        IVendorRepository VendorsRepository { get; }
         int Complete();
     }
 }

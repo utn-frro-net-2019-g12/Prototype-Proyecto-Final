@@ -12,7 +12,7 @@ namespace DataAccessLayer
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Vendor> Vendors { get; set; }
 
- 
+
         public PrototipoConsultaUTNContext() : base("name=PrototipoConsultaUTNContext")
         {
             Database.SetInitializer<PrototipoConsultaUTNContext>(new PrototipoConsultaUTNInitializer());
