@@ -13,6 +13,8 @@ namespace DataAccessLayer
     {
         private readonly PrototipoConsultaUTNContext _context;
 
+        private bool _disposed = false;
+
         public IProductRepository ProductsRepository { get; private set; }
         public IVendorRepository VendorsRepository { get; private set; }
 
@@ -37,9 +39,23 @@ namespace DataAccessLayer
             }
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this._disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+
+            this._disposed = true;
+        }
+
         public void Dispose()
         {
-            _context.Dispose();
+            Dispose(true); 
+            GC.SuppressFinalize(this);
         }
     }
 }

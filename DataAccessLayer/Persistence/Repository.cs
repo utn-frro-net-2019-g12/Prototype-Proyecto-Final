@@ -9,7 +9,7 @@ using DataAccessLayer.Repositories;
 
 namespace DataAccessLayer.Persistence
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected readonly DbContext Context;
         private DbSet<TEntity> _entities;
@@ -20,48 +20,67 @@ namespace DataAccessLayer.Persistence
             _entities = Context.Set<TEntity>();
         }
 
-        public void Add(TEntity entity)
-        {
-            _entities.Add(entity);
-        }
 
-        public void AddRange(IEnumerable<TEntity> entities)
-        {
-            _entities.AddRange(entities);
-        }
-
-        public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
-        {
-            return _entities.Where(predicate).ToList();
-        }
-
-        public TEntity Get(int id)
+        public TEntity GetById(object id)
         {
             return _entities.Find(id);
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public IEnumerable<TEntity> Get(
+            Expression<Func<TEntity, bool>> filter = null
+            )
         {
-            return _entities.ToList();
+            IQueryable<TEntity> query = _entities;
+
+            if(filter != null)
+            {
+                query.Where(filter);
+            }
+
+            return query.ToList();
         }
 
-        public void Remove(TEntity entity)
+        public void Insert(TEntity entity)
         {
+            _entities.Add(entity);
+        }
+
+        public void InsertRange(IEnumerable<TEntity> entities)
+        {
+            _entities.AddRange(entities);
+        }
+
+        public void Delete(object id)
+        {
+            TEntity entityToDelete = _entities.Find(id);
+            Delete(entityToDelete);
+        }
+
+        public void Delete(TEntity entity)
+        {
+            if(Context.Entry(entity).State == EntityState.Detached)
+            {
+                _entities.Attach(entity);
+            }
+
             _entities.Remove(entity);
         }
 
-        public void RemoveRange(IEnumerable<TEntity> entities)
+        public void DeleteRange(IEnumerable<TEntity> entities)
         {
+            foreach(TEntity entity in entities)
+            {
+                if(Context.Entry(entity).State == EntityState.Detached) // REV This may not be necessary
+                {
+                    _entities.Attach(entity);
+                }
+            }
             _entities.RemoveRange(entities);
-        }
-
-        public TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate)
-        {
-            return _entities.SingleOrDefault(predicate);
         }
 
         public void Update(TEntity entity)
         {
+            _entities.Attach(entity);
             Context.Entry(entity).State = EntityState.Modified;
         }
     }

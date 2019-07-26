@@ -17,7 +17,7 @@ namespace DataAccessLayer
                 new Vendor{Name = "La Serenisima", Adress = "Adroge 1545, Santa Teresita"}
             };
 
-            unitOfWork.VendorsRepository.AddRange(vendors);
+            unitOfWork.VendorsRepository.InsertRange(vendors);
 
             unitOfWork.Complete();
 
@@ -28,7 +28,7 @@ namespace DataAccessLayer
                 new Product{ ProductName = "Dulce de Leche", Quantity = 1, Price = 35, VendorId = 1, Vendor = vendors[0]}
             };
 
-            unitOfWork.ProductsRepository.AddRange(products);
+            unitOfWork.ProductsRepository.InsertRange(products);
 
             unitOfWork.Complete();
         }

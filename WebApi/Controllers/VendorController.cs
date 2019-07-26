@@ -25,7 +25,7 @@ namespace WebApi.Controllers
         [Route("")]
         public IHttpActionResult GetAll()
         {
-            var vendors = _unitOfWork.VendorsRepository.GetAll();
+            var vendors = _unitOfWork.VendorsRepository.Get();
 
             return Ok(vendors);
         }
@@ -49,7 +49,7 @@ namespace WebApi.Controllers
         [ResponseType(typeof(Product))]
         public IHttpActionResult Get(int id)
         {
-            var vendor = _unitOfWork.VendorsRepository.Get(id);
+            var vendor = _unitOfWork.VendorsRepository.GetById(id);
 
             if (vendor == null)
             {
@@ -88,7 +88,7 @@ namespace WebApi.Controllers
                     return BadRequest(ModelState);
                 }
 
-                _unitOfWork.VendorsRepository.Add(vendor);
+                _unitOfWork.VendorsRepository.Insert(vendor);
                 _unitOfWork.Complete();
 
                 return CreatedAtRoute("postVendor", new { id = vendor.Id }, vendor);
@@ -111,13 +111,13 @@ namespace WebApi.Controllers
             try
             {
                 // TO-DO: return errors in http format
-                var vendor = _unitOfWork.VendorsRepository.Get(id);
+                var vendor = _unitOfWork.VendorsRepository.GetById(id);
                 if (vendor == null)
                 {
                     return NotFound();
                 }
 
-                _unitOfWork.VendorsRepository.Remove(vendor);
+                _unitOfWork.VendorsRepository.Delete(vendor);
                 _unitOfWork.Complete();
 
                 return Ok(vendor);
@@ -153,7 +153,7 @@ namespace WebApi.Controllers
             }
             catch (Exception)
             {
-                if (_unitOfWork.VendorsRepository.Get(id) == null)
+                if (_unitOfWork.VendorsRepository.GetById(id) == null)
                 {
                     return NotFound();
                 }

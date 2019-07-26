@@ -31,7 +31,7 @@ namespace WebApi.Controllers
         [Route("")]
         public IHttpActionResult GetAll()
         {
-            var products = _unitOfWork.ProductsRepository.GetAll();
+            var products = _unitOfWork.ProductsRepository.Get();
 
             return Ok(products);
         }
@@ -55,7 +55,7 @@ namespace WebApi.Controllers
         [ResponseType(typeof(Product))]
         public IHttpActionResult Get(int id)
         {
-            var product = _unitOfWork.ProductsRepository.Get(id);
+            var product = _unitOfWork.ProductsRepository.GetById(id);
 
             if (product == null)
             {
@@ -94,7 +94,7 @@ namespace WebApi.Controllers
                     return BadRequest(ModelState);
                 }
 
-                _unitOfWork.ProductsRepository.Add(product);
+                _unitOfWork.ProductsRepository.Insert(product);
                 _unitOfWork.Complete();
 
                 return CreatedAtRoute("postProduct", new { id = product.Id }, product);
@@ -117,13 +117,13 @@ namespace WebApi.Controllers
             try
             {
                 // TO-DO: return errors in http format
-                var product = _unitOfWork.ProductsRepository.Get(id);
+                var product = _unitOfWork.ProductsRepository.GetById(id);
                 if (product == null)
                 {
                     return NotFound();
                 }
 
-                _unitOfWork.ProductsRepository.Remove(product);
+                _unitOfWork.ProductsRepository.Delete(product);
                 _unitOfWork.Complete();
 
                 return Ok(product);
@@ -159,7 +159,7 @@ namespace WebApi.Controllers
             }
             catch(Exception)
             {
-                if (_unitOfWork.ProductsRepository.Get(id) == null)
+                if (_unitOfWork.ProductsRepository.GetById(id) == null)
                 {
                     return NotFound();
                 }
