@@ -2,6 +2,7 @@
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
+using AutoMapper;
 using DataAccessLayer;
 
 
@@ -11,10 +12,12 @@ namespace WebApi.Controllers
     public class VendorApiController : ApiController
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public VendorApiController(IUnitOfWork unitOfWork)
+        public VendorApiController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
 

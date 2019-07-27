@@ -8,8 +8,9 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Http.Results;
+using AutoMapper;
 using DataAccessLayer;
-
+using WebApi.DataTransferObjects;
 
 namespace WebApi.Controllers
 {
@@ -17,10 +18,12 @@ namespace WebApi.Controllers
     public class ProductApiController : ApiController
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public ProductApiController(IUnitOfWork unitOfWork)
+        public ProductApiController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
 
@@ -85,7 +88,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("", Name = "postProduct")]
         [ResponseType(typeof(Product))]
-        public IHttpActionResult Post([FromBody] Product product)
+        public IHttpActionResult Post([FromBody] CreateProductDTO productDTO)
         {
             try
             {
@@ -94,10 +97,12 @@ namespace WebApi.Controllers
                     return BadRequest(ModelState);
                 }
 
-                _unitOfWork.ProductsRepository.Insert(product);
+                var productToInsert = _mapper.Map<CreateProductDTO, Product>(productDTO);
+
+                _unitOfWork.ProductsRepository.Insert(productToInsert);
                 _unitOfWork.Complete();
 
-                return CreatedAtRoute("postProduct", new { id = product.Id }, product);
+                return CreatedAtRoute("postProduct", new { id = productToInsert.Id }, productToInsert);
             }
             catch (Exception ex)
             {

@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
-using DataAccessLayer.Repositories;
-using DataAccessLayer.Persistence;
 using Autofac.Integration.WebApi;
 using System.Reflection;
-using DataAccessLayer;
 using System.Data.Entity;
+using WebApi.AutofacModules;
 
 namespace WebApi.IoC
 {
@@ -21,17 +19,12 @@ namespace WebApi.IoC
 
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
-            SetUpRegistration(builder);
+            builder.RegisterModule<DataAccessLayerModule>();
+            builder.RegisterModule<AutoMapperModule>();
 
             IContainer container = builder.Build();
 
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
-        }
-
-        private static void SetUpRegistration(ContainerBuilder builder)
-        {
-            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerLifetimeScope();
-            builder.RegisterType<PrototipoConsultaUTNContext>().AsSelf();
         }
     }
 }
