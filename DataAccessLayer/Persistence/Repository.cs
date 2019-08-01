@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -9,7 +10,7 @@ using DataAccessLayer.Repositories;
 
 namespace DataAccessLayer.Persistence
 {
-    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class 
     {
         protected readonly DbContext Context;
         private DbSet<TEntity> _entities;
@@ -27,17 +28,33 @@ namespace DataAccessLayer.Persistence
         }
 
         public IEnumerable<TEntity> Get(
-            Expression<Func<TEntity, bool>> filter = null
+            Expression<Func<TEntity, bool>> filterExp = null
             )
         {
             IQueryable<TEntity> query = _entities;
 
-            if(filter != null)
+            if (filterExp != null)
             {
-                query.Where(filter);
+                query = query.Where(filterExp);
             }
 
             return query.ToList();
+        }
+
+        public IEnumerable<TEntity> GetOrdered<TKey>(
+            Expression<Func<TEntity, TKey>> orderByExp,
+            Expression<Func<TEntity, bool>> filterExp = null
+            )
+        {
+            Context.Database.Log = message => Trace.Write(message);
+            IQueryable<TEntity> query = _entities;
+
+            if (filterExp != null)
+            {
+                query = query.Where(filterExp);
+            }
+
+            return query.OrderBy(orderByExp).ToList();
         }
 
         public void Insert(TEntity entity)

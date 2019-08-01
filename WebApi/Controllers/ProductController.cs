@@ -34,7 +34,7 @@ namespace WebApi.Controllers
         [Route("")]
         public IHttpActionResult GetAll()
         {
-            var products = _unitOfWork.ProductsRepository.Get();
+            var products = _unitOfWork.ProductsRepository.GetOrdered(e => e.ProductName);
 
             return Ok(products);
         }

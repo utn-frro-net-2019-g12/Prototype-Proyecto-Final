@@ -10,8 +10,10 @@ namespace WebPresentationMVC.Models
     {
         public int Id { get; set; }
 
+        [Required]
         public string ProductName { get; set; }
         public int? Quantity { get; set; }
+        [Required]
         public int? Price { get; set; }
         [Display(Name = "Vendor")]
         public int? VendorId { get; set; }

@@ -7,7 +7,8 @@ namespace DataAccessLayer.Repositories
     public interface IRepository<TEntity> where TEntity : class
     {
         TEntity GetById(object id);
-        IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null);
+        IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filterExp = null);
+        IEnumerable<TEntity> GetOrdered<TKey>(Expression<Func<TEntity, TKey>> orderByExp, Expression<Func<TEntity, bool>> filterExp = null);
 
         void Insert(TEntity entity);
         void InsertRange(IEnumerable<TEntity> entities);

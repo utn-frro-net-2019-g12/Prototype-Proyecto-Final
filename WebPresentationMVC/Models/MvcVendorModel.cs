@@ -17,7 +17,7 @@ namespace WebPresentationMVC.Models
         public string Name { get; set; }
         public string Adress { get; set; }
 
-        // TO-DO: Fix circular reference
+        // TO-DO: Fix deserialization error caused by circular references
         //public virtual ICollection<MvcProductModel> Products { get; set; }
     }
 }
